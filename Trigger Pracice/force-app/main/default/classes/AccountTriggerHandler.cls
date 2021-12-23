@@ -22,4 +22,26 @@ public with sharing class AccountTriggerHandler {
             insert conList;
         }
     }
+    public static void createOppurtunity(Map<Id,Account> newAccMap, Map<Id,Account> oldAccMap){
+        List<Opportunity> oppList = new List<Opportunity>();
+        for (Account acc : newAccMap.values()) {
+            if (newAccMap.get(acc.Id).Rating != oldAccMap.get(acc.Id).Rating 
+                        && newAccMap.get(acc.Id).Rating == 'Hot' ) {
+                Opportunity opp = new Opportunity();
+                opp.AccountId=acc.Id;
+                opp.Name=acc.Name;
+                opp.StageName='Needs Analysis';
+                opp.CloseDate=System.today().addDays(4);
+                oppList.add(opp);
+            }
+        }
+        if (oppList != null && opplist.size()>0) {
+            try {
+                insert oppList;
+            } catch (Exception e) {
+                System.debug('error'+e.getMessage());
+            }
+           
+        }
+    }
 }
