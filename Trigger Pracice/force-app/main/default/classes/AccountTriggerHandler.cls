@@ -44,4 +44,20 @@ public with sharing class AccountTriggerHandler {
            
         }
     }
+    public static void preventAccountDeletion(List<Account> accList){
+        Set<Id> accIdSet = new Set<Id>();
+        Map<Id,Boolean> isAccountIdsPrimaryMap = new Map<Id,Boolean>();
+        for (Account acc : accList) {
+            accIdSet.add(acc.Id);
+        }
+        for (Contact con : [SELECT Id,isPrimary__c,AccountId from Contact
+                                WHERE AccountId IN :accIdSet AND isPrimary__c=True]) {
+            isAccountIdsPrimaryMap.put(con.Id, con.isPrimary__c);
+        }
+        for (Account acc : accList) {
+            if (isAccountIdsPrimaryMap.containsKey(acc.Id)) {
+                acc.addError('This Account Can\'t be deleted.It contains Primary Contact');
+            }
+        }
+    }
 }

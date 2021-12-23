@@ -7,7 +7,10 @@ trigger AccountTrigger on Account (before insert, after insert, after update) {
         AccountTriggerHandler.insertContact(trigger.new);
         
     }
-    if(trigger.isUpdate && trigger.isUpdate){
+    if(trigger.isUpdate && trigger.isAfter){
         AccountTriggerHandler.createOppurtunity(trigger.newMap, trigger.oldMap);
+    }
+    if (trigger.isDelete && trigger.isBefore) {
+        AccountTriggerHandler.preventAccountDeletion(trigger.old);
     }
 }
