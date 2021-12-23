@@ -1,4 +1,4 @@
-trigger AccountTrigger on Account (before insert, after insert, after update) {
+trigger AccountTrigger on Account (before insert, after insert, after update, before delete) {
     if(trigger.isInsert && trigger.isBefore){
         AccountTriggerHandler.validateAccountBeforeInsert(trigger.new);
     }

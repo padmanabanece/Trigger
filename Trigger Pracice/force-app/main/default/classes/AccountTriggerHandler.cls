@@ -49,14 +49,20 @@ public with sharing class AccountTriggerHandler {
         Map<Id,Boolean> isAccountIdsPrimaryMap = new Map<Id,Boolean>();
         for (Account acc : accList) {
             accIdSet.add(acc.Id);
+            
         }
-        for (Contact con : [SELECT Id,isPrimary__c,AccountId from Contact
-                                WHERE AccountId IN :accIdSet AND isPrimary__c=True]) {
-            isAccountIdsPrimaryMap.put(con.Id, con.isPrimary__c);
+        if (accIdSet!=null && accIdSet.size()>0) {
+            for (Contact con : [SELECT Id,isPrimary__c,AccountId from Contact
+                                WHERE AccountId IN :accIdSet AND isPrimary__c=true]) {
+                                
+            isAccountIdsPrimaryMap.put(con.AccountId, con.isPrimary__c);
+           
         }
-        for (Account acc : accList) {
-            if (isAccountIdsPrimaryMap.containsKey(acc.Id)) {
-                acc.addError('This Account Can\'t be deleted.It contains Primary Contact');
+        }
+        
+        for (Account accObj : accList) {
+            if (isAccountIdsPrimaryMap.containsKey(accObj.Id)) {
+                accObj.addError('This Account Can\'t be deleted.It contains Primary Contact');
             }
         }
     }
