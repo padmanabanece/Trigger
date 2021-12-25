@@ -7,6 +7,8 @@
         test.startTest();
             insert acc;
         test.stopTest();
+        Contact con =[SELECT Id From Contact WHERE AccountId =:acc.Id];
+        System.assert(con.Id !=null);
     }
     
 }
