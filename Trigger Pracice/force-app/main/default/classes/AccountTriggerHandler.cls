@@ -1,7 +1,5 @@
 public with sharing class AccountTriggerHandler {
-    public AccountTriggerHandler() {
-        
-    }
+   
     public static void validateAccountBeforeInsert(List<Account> accountList){
         for (Account acc : accountList) {
             if (acc.Rating == 'Hot' && acc.Type==null) {
